@@ -10,9 +10,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mdp/qrterminal"
 )
 
 // UUIDProcessor scan this uuid
@@ -80,17 +83,12 @@ func (wechat *WeChat) beginLoginFlow() error {
 
 	// 1.
 	uuid, e := wechat.fetchUUID()
-
 	if e != nil {
 		return e
 	}
 
 	// 2.
-	err = wechat.conf.Processor.ProcessUUID(uuid)
-
-	if err != nil {
-		return err
-	}
+	qrterminal.Generate("https://login.weixin.qq.com/l/"+uuid, qrterminal.L, os.Stdout)
 
 	// 3.
 	redirectURL, code, tip := ``, ``, 1
@@ -323,17 +321,19 @@ func (wechat *WeChat) keepAlive() {
 
 		logger.Info(`CONGRATULATION login successed`)
 
-		logger.Info(`begin sync contact`)
-		err = wechat.SyncContact()
-		if err != nil {
-			logger.Errorf(`sync contact error: %v`, err)
-		}
-		logger.Info(`sync contact successfully`)
+		/*
+			logger.Info(`begin sync contact`)
+			err = wechat.SyncContact()
+			if err != nil {
+				logger.Errorf(`sync contact error: %v`, err)
+			}
+			logger.Info(`sync contact successfully`)
+		*/
 
-        wechat.IsLogin = true
+		wechat.IsLogin = true
 		wechat.loginState <- 1
 		err = wechat.beginSync()
-        wechat.IsLogin = false
+		wechat.IsLogin = false
 		wechat.loginState <- -1
 
 		logger.Errorf(`sync error: %v`, err)

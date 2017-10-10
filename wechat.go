@@ -84,7 +84,7 @@ func DefaultConfigure() *Configure {
 		Debug:             true,
 		FuzzyDiff:         true,
 		UniqueGroupMember: true,
-		CachePath:         `.ggbot/debug`,
+		CachePath:         `.ggbot`,
 		version:           `1.0.1-rc1`,
 	}
 }
