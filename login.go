@@ -321,14 +321,12 @@ func (wechat *WeChat) keepAlive() {
 
 		logger.Info(`CONGRATULATION login successed`)
 
-		/*
-			logger.Info(`begin sync contact`)
-			err = wechat.SyncContact()
-			if err != nil {
-				logger.Errorf(`sync contact error: %v`, err)
-			}
-			logger.Info(`sync contact successfully`)
-		*/
+		logger.Info(`begin sync contact`)
+		err = wechat.SyncContact()
+		if err != nil {
+			logger.Errorf(`sync contact error: %v`, err)
+		}
+		logger.Info(`sync contact successfully`)
 
 		wechat.IsLogin = true
 		wechat.loginState <- 1
