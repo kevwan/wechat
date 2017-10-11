@@ -53,6 +53,9 @@ type Response struct {
 
 // IsSuccess flag this request is success or failed.
 func (response *Response) IsSuccess() bool {
+	if response == nil || response.BaseResponse == nil {
+		return false
+	}
 	return response.BaseResponse.Ret == 0
 }
 
